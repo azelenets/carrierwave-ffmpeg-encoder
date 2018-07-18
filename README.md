@@ -52,7 +52,7 @@ Pass in options to process:
 
     encode_video :mp4,
                  resolution: :same, # "640x360"
-                 video_codec: 'libx264',
+                 convert_video_codec: 'libx264',
                  video_bitrate: :same,
                  reference_frames: '4',
                  constant_rate_factor: '30',
@@ -60,7 +60,7 @@ Pass in options to process:
                  x264_vprofile: 'baseline',
                  x264_vprofile_level: '3',
                  preserve_aspect_ratio: :height, # :width / false
-                 audio_codec: 'aac',
+                 convert_audio_codec: 'aac',
                  audio_bitrate: '64k',
                  audio_sample_rate: '44100',
                  audio_channels: '1',
@@ -81,7 +81,7 @@ Pass in options to process:
                  }
 
     encode_audio: :mp3,
-                  audio_codec: 'aac',
+                  convert_audio_codec: 'aac',
                   audio_bitrate: '64k',
                   audio_sample_rate: '44100',
                   audio_channels: '1',
