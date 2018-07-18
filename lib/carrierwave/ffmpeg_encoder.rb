@@ -19,14 +19,20 @@ module CarrierWave
 
     module ClassMethods
       def encode_audio(target_format, options={})
-        process encode_audio: [target_format, options]
+        method_name = options.delete(:if)
+        default_params = { encode_audio: [target_format, options] }
+        default_params.merge!(if: method_name.to_sym) if method_name.present?
+        process default_params
       end
 
-      def encode_video(target_format, options={})
+      def encode_video(target_format, options = {})
+        method_name = options.delete(:if)
         if target_format.to_sym == :ogv
           process encode_ogv: [options]
         else
-          process encode_video: [target_format, options]
+          default_params = { encode_video: [target_format, options] }
+          default_params.merge!(if: method_name.to_sym) if method_name.present?
+          process default_params
         end
       end
     end
@@ -66,18 +72,18 @@ module CarrierWave
       end
     end
 
-    def encode_video(format, opts={})
+    def encode_video(format, opts = {})
       cache_stored_file! unless cached?
 
       @options = CarrierWave::FfmpegEncoder::Options.new(format, opts)
       tmp_path = File.join(File.dirname(current_path), "tmpfile.#{format}")
       file = ::FFMPEG::Movie.new(current_path)
 
-      if opts[:resolution] == :same
+      if @options.format_options[:resolution] == :same
         @options.format_options[:resolution] = file.resolution
       end
 
-      if opts[:video_bitrate] == :same
+      if @options.format_options[:video_bitrate] == :same
         @options.format_options[:video_bitrate] = file.video_bitrate
       end
 
@@ -93,7 +99,7 @@ module CarrierWave
         else
           file.transcode(tmp_path, @options.format_params, @options.encoder_options)
         end
-        File.rename tmp_path, current_path
+        File.rename(tmp_path, current_path)
       end
     end
 
@@ -103,26 +109,26 @@ module CarrierWave
       callbacks = @options.callbacks
       logger = @options.logger(model)
 
-      begin
+      # begin
         send_callback(callbacks[:before_transcode])
         setup_logger
         block.call
         send_callback(callbacks[:after_transcode])
-      rescue => e
-        send_callback(callbacks[:rescue])
-
-        if logger
-          logger.error "#{e.class}: #{e.message}"
-          e.backtrace.each do |b|
-            logger.error b
-          end
-        end
-
-        raise CarrierWave::ProcessingError.new("Failed to transcode with FFmpeg. Check ffmpeg install and verify file is not corrupt or cut short. Original error: #{e}")
-      ensure
-        reset_logger
-        send_callback(callbacks[:ensure])
-      end
+      # rescue => e
+      #   send_callback(callbacks[:rescue])
+      #
+      #   if logger
+      #     logger.error "#{e.class}: #{e.message}"
+      #     e.backtrace.each do |b|
+      #       logger.error b
+      #     end
+      #   end
+      #
+      #   raise CarrierWave::ProcessingError.new("Failed to transcode with FFmpeg. Check ffmpeg install and verify file is not corrupt or cut short. Original error: #{e}")
+      # ensure
+      #   reset_logger
+      #   send_callback(callbacks[:ensure])
+      # end
     end
 
     def send_callback(callback)

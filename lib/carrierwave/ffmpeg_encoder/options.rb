@@ -3,36 +3,36 @@
 module CarrierWave
   module FfmpegEncoder
     class Options
-      DEFAULTS_MP3 = { convert_audio_codec: 'libmp3lame',
+      DEFAULTS_MP3 = { audio_codec: 'libmp3lame',
                        audio_bitrate: '160k',
                        audio_sample_rate: '44100',
                        audio_channels: '2',
                        threads: '2' }
 
       DEFAULTS_MP4 = { resolution: :same,
-                       convert_video_codec: 'libx264',
-                       reference_frames: '4',
-                       constant_rate_factor: '30',
+                       video_codec: 'libx264',
+                       # reference_frames: '4',
+                       # constant_rate_factor: '30',
                        frame_rate: '25',
                        x264_vprofile: 'baseline',
-                       x264_vprofile_level: '3',
-                       convert_audio_codec: 'aac',
+                       # x264_vprofile_level: '3',
+                       audio_codec: 'aac',
                        audio_bitrate: '64k',
                        audio_sample_rate: '44100',
                        audio_channels: '1',
-                       strict: true,
+                       # strict: true,
                        threads: '2' }.freeze
 
       DEFAULTS_OGV = { resolution: '640x360',
                        watermark: {},
-                       convert_video_codec: 'libtheora',
-                       convert_audio_codec: 'libvorbis',
+                       video_codec: 'libtheora',
+                       audio_codec: 'libvorbis',
                        threads: '2' }.freeze
 
       DEFAULTS_WEBM = { resolution: '640x360',
                         watermark: {},
-                        convert_video_codec: 'libvpx',
-                        convert_audio_codec: 'libvorbis',
+                        video_codec: 'libvpx',
+                        audio_codec: 'libvorbis',
                         threads: '2' }.freeze
 
       attr_reader :format, :custom, :callbacks
@@ -63,7 +63,7 @@ module CarrierWave
       end
 
       def encoder_options
-        { preserve_aspect_ratio: :width }
+        { }
       end
 
       # input
@@ -75,7 +75,9 @@ module CarrierWave
       def format_params
         params = @format_options.dup
         params.delete(:watermark)
-        params[:custom] = [params[:custom], watermark_params].compact.join(' ')
+        if watermark?
+          params[:custom] = [params[:custom], watermark_params].compact.join(' ')
+        end
         params
       end
 
