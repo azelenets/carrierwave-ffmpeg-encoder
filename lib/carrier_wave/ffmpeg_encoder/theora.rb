@@ -4,6 +4,7 @@ module CarrierWave
   module FfmpegEncoder
     class Theora
       attr_reader :input_path, :output_path
+
       def initialize(input_file_path, output_file_path)
         @input_path = input_file_path
         @output_path = output_file_path
