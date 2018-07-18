@@ -2,7 +2,6 @@
 # -*- encoding: utf-8 -*-
 
 $:.push File.expand_path('../lib', __FILE__)
-require 'carrierwave/ffmpeg_encoder'
 
 Gem::Specification.new do |s|
   s.name        = 'carrierwave-ffmpeg-encoder'
@@ -25,6 +24,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'streamio-ffmpeg'
   s.add_runtime_dependency 'carrierwave'
+
   s.requirements << 'ruby, version 2.3 or greater'
   s.requirements << 'ffmpeg, version 0.11.1 or greater with libx256, libfdk-aac, libtheora, libvorbid, libvpx enabled'
 end

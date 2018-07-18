@@ -13,7 +13,7 @@ Add an audio/video files encoder using `ffmpeg` & `streamio-ffmpeg` rubygems.
 ###  Usage
 
     class AttachmentUploader < CarrierWave::Uploader::Base
-      include CarrierWave::FfmpegEncoder
+      include ::CarrierWave::FfmpegEncoder
 
       encode_video :mp4, callbacks: { after_transcode: :set_success }, if: :video?
       encode_video :ogv, callbacks: { after_transcode: :set_success }, if: :video?
@@ -91,7 +91,7 @@ Pass in options to process:
 ####  Dynamic Configuration
 
     class AttachmentUploader < CarrierWave::Uploader::Base
-      include CarrierWave::FfmpegEncoder
+      include ::CarrierWave::FfmpegEncoder
 
       DEFAULTS = {
         watermark: {
