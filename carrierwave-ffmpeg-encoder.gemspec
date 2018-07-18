@@ -6,7 +6,7 @@ require 'carrierwave/ffmpeg_encoder'
 
 Gem::Specification.new do |s|
   s.name        = 'carrierwave-ffmpeg-encoder'
-  s.version     = CarrierWave::FfmpegEncoder::VERSION
+  s.version     = '0.0.1'
   s.authors     = %w[rheaton azelenets]
   s.email       = %w[rachelmheaton@gmail.com andrew.zelenets@gmail.com]
   s.homepage    = "https://github.com/azelenets/carrierwave-ffmpeg-encoder"
